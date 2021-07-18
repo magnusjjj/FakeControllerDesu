@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "FakeControllerDesu": {
+      "commandName": "Executable",
+      "executablePath": ".\\EmuHawk.exe",
+      "commandLineArgs": " --open-ext-tool-dll=FakeControllerDesu",
+      "workingDirectory": "$(ProjectDir)../BizHawk"
+    }
+  }
+}
