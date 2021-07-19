@@ -361,3 +361,4 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/BizHawk/N64/SaveRAM/sm64.us.SaveRAM.bak

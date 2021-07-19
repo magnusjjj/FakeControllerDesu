@@ -9,6 +9,7 @@
 		<PackageReference Include="pythonnet" Version="3.0.0-preview2021-06-04" />
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="BizHawk.Client.Common" HintPath="$(ProjectDir)../BizHawk/dll/BizHawk.Client.Common.dll" />
+    <Reference Include="Newtonsoft.Json" HintPath="$(ProjectDir)../BizHawk/dll/Newtonsoft.Json.dll" />
 		<Reference Include="BizHawk.Client.EmuHawk" HintPath="$(ProjectDir)../BizHawk/EmuHawk.exe" />
 		<Reference Include="BizHawk.Common" HintPath="$(ProjectDir)../BizHawk/dll/BizHawk.Common.dll" />
 		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(ProjectDir)../BizHawk/dll/BizHawk.WinForms.Controls.dll" />
