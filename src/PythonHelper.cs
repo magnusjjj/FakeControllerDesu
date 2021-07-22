@@ -20,8 +20,28 @@ namespace FakeControllerDesu
 
         public static string FindLibPythonName()
         {
-            // TODO: Actually implement this. https://github.com/ktbarrett/find_libpython
-            return "python39.dll";
+            // https://github.com/ktbarrett/find_libpython
+            try
+            {
+                var cliProcess = new Process()
+                {
+                    StartInfo = new ProcessStartInfo("python", "-m find_libpython")
+                    {
+                        UseShellExecute = false,
+                        RedirectStandardOutput = true
+                    }
+                };
+                cliProcess.Start();
+                string cliOut = cliProcess.StandardOutput.ReadToEnd();
+                cliProcess.WaitForExit();
+                cliProcess.Close();
+                return Path.GetFileName(cliOut);
+            }
+            catch
+            {
+                MessageBox.Show("Could not find python, or another similar error occured. Check that it's installed and on the PATH");
+                return "";
+            }
         }
 
         public static string FindScriptLocation()

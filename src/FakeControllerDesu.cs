@@ -17,7 +17,7 @@ namespace FakeControllerDesu
     public partial class FakeControllerDesu : ToolFormBase, IExternalToolForm
     {
         
-        protected override string WindowTitleStatic => "MyTool";
+        protected override string WindowTitleStatic => "Python";
 
         // These get sets to a collection of BizHawk's API's.
         public ApiContainer? _maybeAPIContainer { get; set; }
@@ -125,6 +125,11 @@ namespace FakeControllerDesu
         private void OpenScriptDirectoryButton_Click(object sender, EventArgs e) // Todo: Does this work on linux?
         {
             Process.Start(PythonHelper.FindScriptLocation());
+        }
+
+        private void OpenGithubButton_Click(object sender, EventArgs e) // Todo: Does this work on linux?
+        {
+            Process.Start(@"https://github.com/magnusjjj/FakeControllerDesu");
         }
     }
 }
