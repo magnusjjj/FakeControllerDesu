@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -13,7 +14,7 @@ using Python.Runtime;
 namespace FakeControllerDesu
 {
     [ExternalTool("FakeControllerDesu")]
-    public sealed class FakeControllerDesu : ToolFormBase, IExternalToolForm
+    public partial class FakeControllerDesu : ToolFormBase, IExternalToolForm
     {
         
         protected override string WindowTitleStatic => "MyTool";
@@ -29,9 +30,6 @@ namespace FakeControllerDesu
 
         // We watch for changes in the script, and restart if its changed.
         FileSystemWatcher watcher;
-
-        ControlWriter cw;
-        MemoryStream memStream = new MemoryStream();
 
         // This is how we start and restart
         public void ReloadScript()
@@ -50,11 +48,19 @@ namespace FakeControllerDesu
                 {
                     dynamic sys = Py.Import("sys");
                     sys.path.append(PythonHelper.FindScriptLocation());
+                    PrintRedirect pr = new PrintRedirect();
+                    pr.WriteEvent += OnPrint;
+                    sys.stdout = pr;
                     module = Py.Import("bizhawkplugin");
                 }
 
                 string path = Directory.GetCurrentDirectory();
             }
+        }
+
+        private void OnPrint(object sender, WriteEventArgs e)
+        {
+            LogBox.AppendText(e.text);
         }
 
         // This is called each time the emulator is started, or a new rom is loaded.
@@ -100,41 +106,25 @@ namespace FakeControllerDesu
         }
 
         public FakeControllerDesu()
-        {
-            ClientSize = new Size(480, 320);
-            SuspendLayout();
-            RichTextBox richTextBox1 = new RichTextBox();
-            richTextBox1.Dock = DockStyle.Fill;
-            this.Controls.Add(richTextBox1);
-            //cw = new ControlWriter(richTextBox1);
+        { 
             ResumeLayout();
             PythonHelper.EnsurePython();
             ReloadScript();
             StartFileWatcher();
+            InitializeComponent();
         }
 
-        public class ControlWriter : TextWriter
+        private void EvalButtonClick(object sender, EventArgs e)
         {
-            private Control textbox;
-            public ControlWriter(Control textbox)
+            using (Py.GIL())
             {
-                this.textbox = textbox;
+                PythonEngine.RunSimpleString(txtEval.Text);
             }
+        }
 
-            public override void Write(char value)
-            {
-                textbox.Text += value;
-            }
-
-            public override void Write(string value)
-            {
-                textbox.Text += value;
-            }
-
-            public override Encoding Encoding
-            {
-                get { return Encoding.ASCII; }
-            }
+        private void OpenScriptDirectoryButton_Click(object sender, EventArgs e) // Todo: Does this work on linux?
+        {
+            Process.Start(PythonHelper.FindScriptLocation());
         }
     }
 }

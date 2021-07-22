@@ -3,14 +3,20 @@
 		<LangVersion>9.0</LangVersion>
 		<Nullable>enable</Nullable>
 		<TargetFramework>net48</TargetFramework>
+		<ApplicationIcon />
+		<OutputType>Library</OutputType>
+		<StartupObject />
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.0" PrivateAssets="all" />
 		<PackageReference Include="pythonnet" Version="3.0.0-preview2021-06-04" />
+		<Reference Include="BizHawk.Emulation.Common">
+		  <HintPath>..\BizHawk\dll\BizHawk.Emulation.Common.dll</HintPath>
+		</Reference>
 		<Reference Include="System.Windows.Forms" />
 		<Reference Include="BizHawk.Client.Common" HintPath="$(ProjectDir)../BizHawk/dll/BizHawk.Client.Common.dll" />
     <Reference Include="Newtonsoft.Json" HintPath="$(ProjectDir)../BizHawk/dll/Newtonsoft.Json.dll" />
-		<Reference Include="BizHawk.Client.EmuHawk" HintPath="$(ProjectDir)../BizHawk/EmuHawk.exe" />
+    <Reference Include="BizHawk.Client.EmuHawk" HintPath="$(ProjectDir)../BizHawk/EmuHawk.exe" />
 		<Reference Include="BizHawk.Common" HintPath="$(ProjectDir)../BizHawk/dll/BizHawk.Common.dll" />
 		<Reference Include="BizHawk.WinForms.Controls" HintPath="$(ProjectDir)../BizHawk/dll/BizHawk.WinForms.Controls.dll" />
 	</ItemGroup>
