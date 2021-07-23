@@ -58,6 +58,21 @@ namespace FakeControllerDesu
             }
         }
 
+        private delegate void SafePrintDelegate(string text);
+
+        private void Print(string message)
+        {
+            if (LogBox.InvokeRequired)
+            {
+                var d = new SafePrintDelegate(Print);
+                LogBox.Invoke(d, new object[] { message });
+            }
+            else
+            {
+                Print(message);
+            }
+        }
+
         private void OnPrint(object sender, WriteEventArgs e)
         {
             LogBox.AppendText(e.text);
@@ -67,8 +82,13 @@ namespace FakeControllerDesu
         public override void Restart()
         {
             using (Py.GIL()) {
-                module.set_apicontainer(APIs);
-                module.restart();
+                try { 
+                    module.set_apicontainer(APIs);
+                    module.restart();
+                } catch (Python.Runtime.PyScopeException e)
+                {
+                    
+                }
             }
         }
 
@@ -108,10 +128,10 @@ namespace FakeControllerDesu
         public FakeControllerDesu()
         { 
             ResumeLayout();
+            InitializeComponent();
             PythonHelper.EnsurePython();
             ReloadScript();
             StartFileWatcher();
-            InitializeComponent();
         }
 
         private void EvalButtonClick(object sender, EventArgs e)

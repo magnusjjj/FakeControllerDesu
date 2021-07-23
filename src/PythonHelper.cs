@@ -28,7 +28,9 @@ namespace FakeControllerDesu
                     StartInfo = new ProcessStartInfo("python", "-m find_libpython")
                     {
                         UseShellExecute = false,
-                        RedirectStandardOutput = true
+                        RedirectStandardOutput = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true
                     }
                 };
                 cliProcess.Start();
@@ -58,7 +60,9 @@ namespace FakeControllerDesu
                     StartInfo = new ProcessStartInfo("python", "-m pip list --disable-pip-version-check --format json")
                     {
                         UseShellExecute = false,
-                        RedirectStandardOutput = true
+                        RedirectStandardOutput = true,
+                        WindowStyle = ProcessWindowStyle.Hidden,
+                        CreateNoWindow = true
                     }
                 };
                 cliProcess.Start();
@@ -86,7 +90,9 @@ These can be installed via running pip install pythonnet find_libpython. We can 
                         StartInfo = new ProcessStartInfo("python", "-m pip install wheel pythonnet find_libpython")
                         {
                             UseShellExecute = false,
-                            RedirectStandardOutput = true
+                            RedirectStandardOutput = true,
+                            WindowStyle = ProcessWindowStyle.Hidden,
+                            CreateNoWindow = true
                         }
                     };
                     cliProcess.Start();

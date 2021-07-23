@@ -33,7 +33,6 @@
             this.EvalButton = new System.Windows.Forms.Button();
             this.contextMenu1 = new System.Windows.Forms.ContextMenu();
             this.OpenScriptDirectoryButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.OpenGithubButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -79,15 +78,6 @@
             this.OpenScriptDirectoryButton.UseVisualStyleBackColor = true;
             this.OpenScriptDirectoryButton.Click += new System.EventHandler(this.OpenScriptDirectoryButton_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(0, 0);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // OpenGithubButton
             // 
             this.OpenGithubButton.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -103,7 +93,6 @@
             // 
             this.ClientSize = new System.Drawing.Size(747, 516);
             this.Controls.Add(this.OpenGithubButton);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.OpenScriptDirectoryButton);
             this.Controls.Add(this.EvalButton);
             this.Controls.Add(this.txtEval);
@@ -121,7 +110,6 @@
         private System.Windows.Forms.Button EvalButton;
         private System.Windows.Forms.ContextMenu contextMenu1;
         private System.Windows.Forms.Button OpenScriptDirectoryButton;
-        private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button OpenGithubButton;
     }
 }
