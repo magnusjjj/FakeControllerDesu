@@ -34,16 +34,22 @@ namespace FakeControllerDesu
         // This is how we start and restart
         public void ReloadScript()
         {
+
+            PythonEngine.DebugGIL = true;
+
             lock (reloadlock)
             {
                 if (PythonEngine.IsInitialized) // Only run this code if python has actually started.
                 {
-                     PythonEngine.Shutdown();
+                    PythonEngine.EndAllowThreads(pythonthreadstate);
+                    PythonEngine.Shutdown();
                 }
 
                 Environment.SetEnvironmentVariable("PYTHONNET_PYDLL", PythonHelper.FindLibPythonName()); // Not really implemented yet.
+                
                 PythonEngine.Initialize();
                 pythonthreadstate = PythonEngine.BeginAllowThreads();
+
                 using (Py.GIL()) // The GIL is the Global Interpreter Lock. This is so that we don't touch python while it's running.
                 {
                     dynamic sys = Py.Import("sys");
@@ -51,10 +57,15 @@ namespace FakeControllerDesu
                     PrintRedirect pr = new PrintRedirect();
                     pr.WriteEvent += OnPrint;
                     sys.stdout = pr;
-                    module = Py.Import("bizhawkplugin");
+                    try
+                    {
+                        module = Py.Import("bizhawkpluginmain");
+                    }
+                    catch(Python.Runtime.PythonException e)
+                    {
+                        Print(e.Format());
+                    }
                 }
-
-                string path = Directory.GetCurrentDirectory();
             }
         }
 
@@ -69,7 +80,7 @@ namespace FakeControllerDesu
             }
             else
             {
-                Print(message);
+                LogBox.AppendText(message);
             }
         }
 
@@ -82,12 +93,34 @@ namespace FakeControllerDesu
         public override void Restart()
         {
             using (Py.GIL()) {
-                try { 
-                    module.set_apicontainer(APIs);
-                    module.restart();
+                try {
+                    if (module != null)
+                    {
+                        module.plugin.set_apicontainer(APIs);
+                        module.plugin.Restart();
+                    }
                 } catch (Python.Runtime.PyScopeException e)
                 {
                     
+                }
+            }
+        }
+
+        protected override void UpdateAfter()
+        {
+            using (Py.GIL())
+            {
+                try
+                {
+                    if (module != null && module.plugin != null)
+                    {
+                        module.plugin.set_apicontainer(APIs);
+                        module.plugin.UpdateAfter();
+                    }
+                }
+                catch (Python.Runtime.PyScopeException e)
+                {
+
                 }
             }
         }
@@ -122,7 +155,23 @@ namespace FakeControllerDesu
 
         private void OnChanged(object sender, FileSystemEventArgs e)
         {
-            ReloadScript();
+            Print("Script change detected, reloading python.\r\n");
+            FileEvent();
+        }
+
+        private delegate void SafeFileEventDelegate();
+
+        private void FileEvent()
+        {
+            if (LogBox.InvokeRequired)
+            {
+                var d = new SafeFileEventDelegate(FileEvent); // Dirtiest hack, ever. Runs the damn function on the LogBox, straight copied.
+                LogBox.Invoke(d, new object[] {});
+            }
+            else
+            {
+                ReloadScript();
+            }
         }
 
         public FakeControllerDesu()
