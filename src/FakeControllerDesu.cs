@@ -99,9 +99,12 @@ namespace FakeControllerDesu
                         module.plugin.set_apicontainer(APIs);
                         module.plugin.Restart();
                     }
-                } catch (Python.Runtime.PyScopeException e)
+                } catch (Python.Runtime.PyScopeException e) // ... Do something?
                 {
                     
+                } catch (Python.Runtime.PythonException e)
+                {
+                    Print(e.Format());
                 }
             }
         }
